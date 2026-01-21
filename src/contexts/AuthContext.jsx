@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true'
 
   /**
    * ======================================
@@ -89,26 +90,51 @@ export const AuthProvider = ({ children }) => {
    * ======================================
    */
   const loginWithEmail = async (email, password) => {
-    try {
-      const user = await authService.loginWithEmail(email, password)
+  try {
+    // ✅ GitHub Pages / Demo mode
+    if (DEMO_MODE) {
+      console.warn('🧪 Demo mode: email login mocked')
 
-      const token = localStorage.getItem('userToken')
-      if (!token || !isUserToken(token)) {
-        throw new Error('Invalid token: not a user token')
+      const demoUser = {
+        id: 1,
+        name: 'Demo User',
+        email,
+        role: 'USER',
       }
 
-      setUserToken(token)
-      setUser(user)
+      const demoToken = 'demo-user-token'
+
+      localStorage.setItem('user', JSON.stringify(demoUser))
+      localStorage.setItem('userToken', demoToken)
+
+      setUser(demoUser)
+      setUserToken(demoToken)
       setError(null)
 
-      console.log('✅ AuthProvider: Email login successful')
-      return user
-    } catch (error) {
-      console.error('AuthProvider: Email login failed:', error)
-      setError(error.message)
-      throw error
+      return demoUser
     }
+
+    // 🔐 Real backend login (local / future prod)
+    const user = await authService.loginWithEmail(email, password)
+
+    const token = localStorage.getItem('userToken')
+    if (!token || !isUserToken(token)) {
+      throw new Error('Invalid token: not a user token')
+    }
+
+    setUserToken(token)
+    setUser(user)
+    setError(null)
+
+    console.log('✅ AuthProvider: Email login successful')
+    return user
+  } catch (error) {
+    console.error('AuthProvider: Email login failed:', error)
+    setError(error.message)
+    throw error
   }
+}
+
 
   /**
    * ======================================
@@ -143,5 +169,19 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user && !!userToken && isTokenValid(userToken),
   }
 
+  if (DEMO_MODE) {
+  return {
+    token: 'demo-token',
+    user: {
+      email,
+      role: 'USER',
+    },
+  }
+}
+
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+
+
+
 }

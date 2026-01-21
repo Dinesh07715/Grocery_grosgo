@@ -14,9 +14,9 @@ import { mockCoupons } from '../utils/mockData'
 const Cart = () => {
   const navigate = useNavigate()
   const {
-    cart, loading, coupon, updateQuantity, removeFromCart, clearCart,
+    cart, loading, coupon, updateCartItem, removeFromCart, clearCart,
     getCartTotal, getCartCount, getDeliveryCharge, getFinalTotal,
-    applyCoupon, removeCoupon,
+    applyCoupon, 
   } = useCart()
 
   const [address, setAddress] = useState('')
@@ -38,7 +38,7 @@ const Cart = () => {
       return
     }
 
-    if (cart.length === 0) {
+    if (!cart?.items || cart.items.length === 0) {
       toast.error('Cart is empty!')
       return
     }
@@ -56,7 +56,7 @@ const Cart = () => {
       }
 
       console.log('📤 Placing order to backend...')
-      console.log('🛒 Cart items:', cart.length)
+      console.log('🛒 Cart items:', cart.items.length)
       
       // ✅ Call your Spring Boot API
       const response = await fetch('http://localhost:8081/api/orders/place', {
@@ -113,10 +113,10 @@ const Cart = () => {
   // Update quantity handler
   const handleUpdateQuantity = async (productId, newQuantity) => {
     if (newQuantity <= 0) {
-      const cartItem = cart.find(item => item.food?.id === productId || item.id === productId)
+      const cartItem = cart.items.find(item => item.food?.id === productId || item.id === productId)
       if (cartItem) await removeFromCart(cartItem.id)
     } else {
-      await updateQuantity(productId, newQuantity)
+      await updateCartItem(productId, newQuantity)
     }
   }
 
@@ -337,7 +337,7 @@ const Cart = () => {
               {/* PLACE ORDER BUTTON */}
               <button
                 onClick={handlePlaceOrder}
-                disabled={!address || address.length < 10 || cart.length === 0 || isPlacingOrder}
+                disabled={!address || address.length < 10 || cart.items.length === 0 || isPlacingOrder}
                 className="w-full bg-gradient-to-r from-emerald-600 to-green-700 text-white py-5 px-8 rounded-2xl text-xl font-black shadow-2xl hover:from-emerald-700 hover:to-green-800 focus:outline-none focus:ring-4 focus:ring-emerald-500 transform hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-4 shadow-emerald-500/50"
               >
                 {isPlacingOrder ? (

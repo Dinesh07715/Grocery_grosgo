@@ -48,7 +48,7 @@ const AdminLogin = () => {
 
       console.log('📤 Sending admin login request')
 
-      const res = await fetch('http://localhost:8081/api/users/login', {
+      const res = await fetch('http://localhost:8081/api/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ const AdminLogin = () => {
         {/* Debug Info */}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
-            Backend: http://localhost:8081/api/users/login
+            Backend: http://localhost:8081/api/user/login
           </p>
         </div>
       </div>

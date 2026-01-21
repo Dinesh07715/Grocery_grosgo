@@ -53,17 +53,8 @@ export const CartProvider = ({ children }) => {
       console.log('✅ Cart loaded successfully')
     } catch (error) {
       console.error('Error loading cart:', error)
-
-      // ❌ NEVER clear tokens on admin routes
-      if (!window.location.pathname.startsWith('/admin')) {
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          console.warn('🚫 Invalid user cart token - clearing user auth')
-          localStorage.removeItem('user')
-          localStorage.removeItem('userToken')
-          setCart(null)
-          setItemCount(0)
-        }
-      }
+      // setCart(null)
+      // setItemCount(0)
     } finally {
       setLoading(false)
     }
@@ -75,8 +66,9 @@ export const CartProvider = ({ children }) => {
    * ======================================
    */
   useEffect(() => {
+    // ✅ FIX #2: Reload cart whenever userToken exists (refresh-safe)
     loadCart()
-  }, [])
+  }, [localStorage.getItem('userToken')])
 
   /**
    * ======================================
@@ -92,14 +84,17 @@ export const CartProvider = ({ children }) => {
    */
   const getCartTotal = () => {
     if (!cart || !cart.items) return 0
-    return cart.items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    return cart.items.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    )
   }
 
   const getDeliveryCharge = () => {
     const subtotal = getCartTotal()
     if (subtotal === 0) return 0
-    if (subtotal > 500) return 0 // Free delivery above 500
-    return 30 // Standard delivery charge
+    if (subtotal > 500) return 0
+    return 30
   }
 
   const getFinalTotal = () => {
@@ -112,9 +107,7 @@ export const CartProvider = ({ children }) => {
    * ======================================
    */
   const checkAndClearCartForDeliveredOrders = async (orders) => {
-    // 🚫 Admin safety
     if (window.location.pathname.startsWith('/admin')) return
-
     if (!Array.isArray(orders) || orders.length === 0) return
     if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) return
 
@@ -151,25 +144,18 @@ export const CartProvider = ({ children }) => {
     return token
   }
 
-  const addToCart = async (productId, quantity = 1, variantId = null) => {
-    const token = requireUserToken()
-    console.log('🛒 Adding to cart with token:', token?.substring(0, 20) + '...')
+  const addToCart = async (productId, quantity = 1) => {
+    requireUserToken()
 
-    try {
-      const response = await API.post(
-        '/cart/add',
-        { foodId: productId, quantity },
-        { headers: { 'X-Use-Token': 'user' } }
-      )
+    const response = await API.post(
+      '/cart/add',
+      { foodId: productId, quantity },
+      { headers: { 'X-Use-Token': 'user' } }
+    )
 
-      setCart(response.data)
-      setItemCount(response.data.items?.length || 0)
-      console.log('✅ Item added to cart')
-      return response.data
-    } catch (error) {
-      console.error('❌ Add to cart error:', error.response?.status, error.response?.data)
-      throw error
-    }
+    setCart(response.data)
+    setItemCount(response.data.items?.length || 0)
+    return response.data
   }
 
   const updateCartItem = async (itemId, quantity) => {
@@ -225,5 +211,9 @@ export const CartProvider = ({ children }) => {
     refreshCart: loadCart,
   }
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+    </CartContext.Provider>
+  )
 }

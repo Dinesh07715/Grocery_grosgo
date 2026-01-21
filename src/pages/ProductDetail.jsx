@@ -31,7 +31,7 @@ const ProductDetail = () => {
   useEffect(() => {
     // Set initial quantity from cart if item exists
     if (product) {
-      const cartItem = cart.find(
+      const cartItem = cart?.items?.find(
   item => item?.food?.id === product.id || item?.foodId === product.id
 )
 setQuantity(cartItem?.quantity || 1)
@@ -84,7 +84,7 @@ setQuantity(cartItem?.quantity || 1)
     try {
       setAddingToCart(true)
       const cartItem =
-  cart?.find(item =>
+  cart?.items?.find(item =>
     item?.food?.id === product?.id ||
     item?.foodId === product?.id ||
     item?.id === product?.id
@@ -95,7 +95,7 @@ setQuantity(cartItem?.quantity || 1)
   // ✅ FIX: Replace quantity, don't add
   await updateQuantity(product.id, quantity)
 } else {
-  await addToCart(product, quantity)
+  await addToCart(product.id, quantity)
 }
 
       
@@ -108,7 +108,7 @@ setQuantity(cartItem?.quantity || 1)
   }
 
   // ✅ FIXED - Safe cart lookup
-const cartItem = cart?.find(item => 
+const cartItem = cart?.items?.find(item =>
   (item?.food?.id || item?.id || item?.foodId) === product?.id
 ) || null;
 
