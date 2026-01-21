@@ -1,0 +1,6 @@
+export const ORDER_STATUS_FLOW = [
+  "PLACED",
+  "CONFIRMED",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED"
+]
