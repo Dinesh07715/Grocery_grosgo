@@ -42,8 +42,8 @@ public class SecurityConfig {
 
                 // ✅ PUBLIC APIs
                 .requestMatchers(
-                    "/api/users/login",
-                    "/api/users/register",
+                    "/api/user/login",
+                    "/api/user/register",
                     "/swagger-ui/**",
                     "/mail/test",
                     "/v3/api-docs/**",
@@ -60,6 +60,7 @@ public class SecurityConfig {
 
                 // ✅ USER APIs
                 .requestMatchers(
+                    "/api/user/**", 
                     "/api/orders/place",
                     "/api/orders/my",
                     "/api/payment/initiate/**"

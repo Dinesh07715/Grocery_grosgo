@@ -61,9 +61,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Order order = new Order();
-order.setUser(user);
-order.setStatus(OrderStatus.PLACED);
+        order.setUser(user);
+        order.setStatus(OrderStatus.PLACED);
 order.setOrderDate(LocalDateTime.now());
+order.setDeliveryAddress(request.getDeliveryAddress());
 
 double total = 0.0;
 List<OrderItem> orderItems = new ArrayList<>();

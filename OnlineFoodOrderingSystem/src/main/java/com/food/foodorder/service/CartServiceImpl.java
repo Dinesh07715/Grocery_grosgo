@@ -66,16 +66,13 @@ public class CartServiceImpl implements CartService {
 
     // ================= GET MY CART =================
     @Override
-    public List<CartItemResponse> getMyCart(String email) {
+    public CartResponse getCart(String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED, "User not found"));
 
-        return cartRepository.findByUserId(user.getId())
-                .stream()
-                .map(this::mapToItemResponse)
-                .collect(Collectors.toList());
+        return buildCartResponse(user.getId());
     }
 
     // ================= UPDATE CART ITEM =================

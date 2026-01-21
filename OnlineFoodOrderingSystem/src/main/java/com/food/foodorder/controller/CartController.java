@@ -32,8 +32,8 @@ public class CartController {
     }
 
     @GetMapping("/my")
-    public List<CartItemResponse> getMyCart(Authentication authentication) {
-        return cartService.getMyCart(authentication.getName());
+    public  CartResponse getMyCart(Authentication authentication) {
+        return cartService.getCart(authentication.getName());
     }
 
     @PutMapping("/update/{itemId}")

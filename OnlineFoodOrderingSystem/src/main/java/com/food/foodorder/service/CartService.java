@@ -9,7 +9,7 @@ public interface CartService {
 
     CartResponse addToCart(CartRequest request, String email);
 
-    List<CartItemResponse> getMyCart(String email);
+    CartResponse getCart(String email);
 
     CartResponse updateCartItem(Long itemId, Long
          quantity, String email);
