@@ -16,8 +16,8 @@ export const API_ENDPOINTS = {
   LOGOUT: '/auth/logout',
   
   // User
-  PROFILE: '/user/profile',
-  UPDATE_PROFILE: '/user/profile',
+  PROFILE: '/users/profile',
+  UPDATE_PROFILE: '/users/profile',
   
   // Location & Address
   LOCATIONS: '/locations',

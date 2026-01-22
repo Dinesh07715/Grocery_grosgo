@@ -42,8 +42,8 @@ public class SecurityConfig {
 
                 // ✅ PUBLIC APIs
                 .requestMatchers(
-                    "/api/user/login",
-                    "/api/user/register",
+                    "/api/users/login",
+                    "/api/users/register",
                     "/swagger-ui/**",
                     "/mail/test",
                     "/v3/api-docs/**",
@@ -60,7 +60,7 @@ public class SecurityConfig {
 
                 // ✅ USER APIs
                 .requestMatchers(
-                    "/api/user/**", 
+                    "/api/users/**",
                     "/api/orders/place",
                     "/api/orders/my",
                     "/api/payment/initiate/**"
@@ -93,15 +93,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+    config.setAllowCredentials(true);
+
+    // ✅ ALLOW LOCAL + NETLIFY
+    config.addAllowedOrigin("http://localhost:3000");
+    config.addAllowedOrigin("http://localhost:5173");
+    config.addAllowedOrigin("https://dashing-pegasus-f3e88b.netlify.app");
+
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+
+    return source;
+}
+
 }
