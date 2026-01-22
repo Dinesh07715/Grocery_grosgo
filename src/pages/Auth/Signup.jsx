@@ -41,32 +41,58 @@ const Signup = () => {
   const handleEmailSignup = async (e) => {
     e.preventDefault()
 
-    if (!name || !email || !password) {
-      toast.error("All fields are required")
+    if (!name.trim()) {
+      toast.error("Name is required")
+      return
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Enter a valid email address")
+      return
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters")
       return
     }
 
     try {
       setLoading(true)
 
-      await API.post("/users/register", {
-        name,
-        email,
-        password,
-        role: "USER"  // 🔑 Set default role for users
+      console.log('📤 Sending registration request:', {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        role: "USER"
       })
 
+      const response = await API.post("users/register", {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+        role: "USER"
+      })
+
+      console.log('✅ Registration successful:', response.data)
       toast.success("Signup successful! Please login.")
       navigate("/login")
 
     } catch (err) {
-      // ✅ FIXED: Changed 'respose' to 'response'
-      console.error("SIGNUP ERROR:", err.response?.data)
+      console.error("❌ SIGNUP ERROR:", err)
+      console.error("Response data:", err.response?.data)
+      console.error("Response status:", err.response?.status)
 
-      const message = 
-        err.response?.data?.message || "Signup failed. Please try again."
-
-      toast.error(message)
+      if (err.response?.status === 409 || err.response?.data?.message?.includes('already exists')) {
+        toast.error("Email already registered. Please login.")
+      } else if (err.response?.status === 400) {
+        const message = err.response?.data?.message || "Invalid input. Please check your details."
+        toast.error(message)
+      } else if (err.response?.status === 500) {
+        toast.error("Server error. Please try again later.")
+        console.error("Server error details:", err.response?.data)
+      } else {
+        const message = err.response?.data?.message || "Signup failed. Please try again."
+        toast.error(message)
+      }
     } finally {
       setLoading(false)
     }
