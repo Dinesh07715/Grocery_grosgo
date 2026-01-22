@@ -1,68 +1,85 @@
-// API Configuration
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api'
+// src/config/config.js
 
+/**
+ * ================================
+ * ENVIRONMENT BASE URL
+ * ================================
+ * Netlify  → uses VITE_API_BASE_URL
+ * Local    → fallback to localhost
+ */
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL
+    ? `${import.meta.env.VITE_API_BASE_URL}/api`
+    : 'http://localhost:8080/api'
 
+/**
+ * ================================
+ * DEMO MODE (optional)
+ * ================================
+ */
 export const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true'
 
-
-
+/**
+ * ================================
+ * API ENDPOINTS
+ * ================================
+ * Do NOT include /api here (it's already in BASE_URL)
+ */
 export const API_ENDPOINTS = {
-  // Auth
-  SIGNUP: '/auth/signup',
-  LOGIN: '/auth/login',
-  VERIFY_OTP: '/auth/verify-otp',
-  RESEND_OTP: '/auth/resend-otp',
-  REFRESH_TOKEN: '/auth/refresh-token',
-  LOGOUT: '/auth/logout',
-  
-  // User
+  // 🔐 AUTH
+  LOGIN: '/users/login',
+  REGISTER: '/users/register',
+
+  // 👤 USER
   PROFILE: '/users/profile',
   UPDATE_PROFILE: '/users/profile',
-  
-  // Location & Address
-  LOCATIONS: '/locations',
-  ADDRESSES: '/addresses',
-  SAVE_ADDRESS: '/addresses',
-  DELETE_ADDRESS: '/addresses/:id',
-  SERVICEABILITY: '/locations/serviceability',
-  
-  // Products
-  PRODUCTS: '/foods',
-  PRODUCT_DETAIL: '/foods/:id',
-  PRODUCTS_BY_CATEGORY: '/foods/category/:category',
+
+  // 🥬 PRODUCTS / FOODS
+  FOODS: '/foods',
+  PRODUCTS: '/foods',  // Alias for FOODS
+  FOOD_DETAIL: '/foods/:id',
+  PRODUCT_DETAIL: '/foods/:id',  // Alias for FOOD_DETAIL
+  FOODS_BY_CATEGORY: '/foods/category/:category',
+  PRODUCTS_BY_CATEGORY: '/foods/category/:category',  // Alias
   SEARCH: '/foods/search',
-  
-  // Cart
-  CART: '/cart',
+
+  // 🛒 CART
+  CART: '/cart/my',
   ADD_TO_CART: '/cart/add',
   UPDATE_CART: '/cart/update/:id',
   REMOVE_FROM_CART: '/cart/remove/:id',
   CLEAR_CART: '/cart/clear',
-  
-  // Orders
+
+  // 📦 ORDERS
   ORDERS: '/orders',
   ORDER_DETAIL: '/orders/:id',
   PLACE_ORDER: '/orders/place',
-  CANCEL_ORDER: '/orders/:id/cancel',
-  REORDER: '/orders/:id/reorder',
+  MY_ORDERS: '/orders/my',
+
+  // 💳 PAYMENT
+  PAYMENT_INITIATE: '/payment/initiate',
+  PAYMENT_COMPLETE: '/payment/complete',
+
+  // 🖼️ IMAGES
+  UPLOADS: '/uploads',
   
-  // Coupons
-  COUPONS: '/coupons',
-  APPLY_COUPON: '/coupons/apply',
-  
-  // Categories
+  // 📂 CATEGORIES & BANNERS (if needed)
   CATEGORIES: '/categories',
-  
-  // Banners
   BANNERS: '/banners',
 }
 
+/**
+ * ================================
+ * URL BUILDER
+ * ================================
+ */
 export const getApiUrl = (endpoint, params = {}) => {
-  let url = `${API_BASE_URL}${endpoint}`
-  Object.keys(params).forEach(key => {
+  let url = endpoint
+
+  // Replace :param with actual values
+  Object.keys(params).forEach((key) => {
     url = url.replace(`:${key}`, params[key])
   })
+
   return url
 }
-
-

@@ -16,6 +16,36 @@ public class FoodController {
     @Autowired
     private FoodService foodService;
 
+    // ✅ Get all foods (REST-ful endpoint)
+    @GetMapping
+    public List<Food> getFoods() {
+        return foodService.getAllFoods();
+    }
+
+    // ✅ Get all foods (alternative endpoint)
+    @GetMapping("/all")
+    public List<Food> getAllFoods() {
+        return foodService.getAllFoods();
+    }
+
+    // ✅ Get food by id
+    @GetMapping("/{id}")
+    public Food getFoodById(@PathVariable Long id) {
+        return foodService.getFoodById(id);
+    }
+
+    // ✅ Get foods by category
+    @GetMapping("/category/{category}")
+    public List<Food> getFoodsByCategory(@PathVariable String category) {
+        return foodService.getFoodByCategory(category);
+    }
+
+    // ✅ Search foods
+    @GetMapping("/search")
+    public List<Food> searchFoods(@RequestParam String q) {
+        return foodService.searchFoods(q);
+    }
+
     // ✅ Add single food
     @PostMapping("/add")
     public Food addFood(@RequestBody Food food) {
@@ -28,40 +58,16 @@ public class FoodController {
         return foodService.addAllFoods(foods);
     }
 
-    // ✅ Get all foods
-    @GetMapping("/all")
-    public List<Food> getAllFoods() {
-        return foodService.getAllFoods();
-    }
-
-    // ✅ Get food by id
-    @GetMapping("/{id}")
-    public Food getFoodById(@PathVariable Long id) {
-        return foodService.getFoodById(id);
-    }
- // ✅ Get foods by category  🔥 ADD HERE
-    @GetMapping("/category/{category}")
-    public List<Food> getFoodsByCategory(@PathVariable String category) {
-        return foodService.getFoodByCategory(category);
-    }
-    
- // ✅ Update food
+    // ✅ Update food
     @PutMapping("/update/{id}")
     public Food updateFood(@PathVariable Long id, @RequestBody Food food) {
         return foodService.updateFood(id, food);
     }
-
 
     // ✅ Delete food
     @DeleteMapping("/delete/{id}")
     public String deleteFood(@PathVariable Long id) {
         foodService.deleteFood(id);
         return "Food deleted successfully";
-    }
-
-    // ✅ Search foods
-    @GetMapping("/search")
-    public List<Food> searchFoods(@RequestParam String q) {
-        return foodService.searchFoods(q);
     }
 }

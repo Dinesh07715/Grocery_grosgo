@@ -19,7 +19,7 @@ import com.food.foodorder.security.JwtUtil;
 import com.food.foodorder.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
 

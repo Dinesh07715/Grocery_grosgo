@@ -10,6 +10,7 @@ import { useCart } from '../contexts/CartContext'
 import { formatPrice } from '../utils/helpers'
 import toast from 'react-hot-toast'
 import { mockCoupons } from '../utils/mockData'
+import { BASE_URL } from '../api/api'
 
 const Cart = () => {
   const navigate = useNavigate()
@@ -59,7 +60,7 @@ const Cart = () => {
       console.log('🛒 Cart items:', cart.items.length)
       
       // ✅ Call your Spring Boot API
-      const response = await fetch('http://localhost:8081/api/orders/place', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/orders/place`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

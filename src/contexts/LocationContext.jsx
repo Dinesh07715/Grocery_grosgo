@@ -35,11 +35,10 @@ export const LocationProvider = ({ children }) => {
     try {
       setLoading(true)
       // ✅ FETCH USER'S SAVED ADDRESS FROM BACKEND
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('usertoken')
       if (token) {
-        const res = await API.get('/user/profile', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        const res = await API.get('/users/profile')
+
         const user = res.data
         if (user.address) {
           const userAddress = {
@@ -90,10 +89,8 @@ export const LocationProvider = ({ children }) => {
   const saveAddress = async (addressData) => {
     try {
       // ✅ SAVE ADDRESS TO BACKEND
-      const token = localStorage.getItem('token')
-      const res = await API.put('/users/address', addressData, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const token = localStorage.getItem('usertoken')
+      const res = await API.put('/users/address', addressData)
 
       const updatedUser = res.data
       const userAddress = {

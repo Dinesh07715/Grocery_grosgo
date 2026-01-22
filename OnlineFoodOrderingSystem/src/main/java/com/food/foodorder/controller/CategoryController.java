@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.food.foodorder.repository.CategoryRepository;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 @CrossOrigin("*")
 public class CategoryController {
 

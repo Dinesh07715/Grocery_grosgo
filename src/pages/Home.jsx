@@ -27,7 +27,7 @@ const Home = () => {
     try {
       setLoading(true)
 
-      const res = await API.get('/foods/all')
+      const res = await API.get('/foods')
       setAllProducts(res.data)
 
       setCategories([

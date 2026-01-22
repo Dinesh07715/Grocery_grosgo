@@ -10,7 +10,9 @@ export const productService = {
 
   // Get product by ID
   getProductById: async (id) => {
-    const response = await API.get(getApiUrl(API_ENDPOINTS.PRODUCT_DETAIL, { id }))
+    const url = getApiUrl(API_ENDPOINTS.PRODUCT_DETAIL, { id })
+    console.log('🔍 Fetching product from URL:', url)
+    const response = await API.get(url)
     return response.data
   },
 
@@ -23,7 +25,8 @@ export const productService = {
       
       // Try to fetch from category endpoint first
       try {
-        const response = await API.get(getApiUrl(API_ENDPOINTS.PRODUCTS_BY_CATEGORY, { category }))
+        const url = getApiUrl(API_ENDPOINTS.PRODUCTS_BY_CATEGORY, { category })
+        const response = await API.get(url)
         let products = response.data.products || response.data || []
         
         console.log('📦 Products from category endpoint:', products.length)
@@ -135,7 +138,7 @@ export const productService = {
       
       console.log('🔍 Fetching products for categories:', categories)
       
-      // Fetch all products - use the PRODUCTS endpoint from config
+      // Fetch all products
       const response = await API.get(API_ENDPOINTS.PRODUCTS)
       let products = response.data.products || response.data || []
 
@@ -200,15 +203,35 @@ export const productService = {
     return response.data
   },
 
-  // Get categories
+  // Get categories (placeholder - implement if you have a categories endpoint)
   getCategories: async () => {
-    const response = await API.get(API_ENDPOINTS.CATEGORIES)
-    return response.data
+    // If you have a categories endpoint, use it:
+    // const response = await API.get(API_ENDPOINTS.CATEGORIES)
+    // return response.data
+    
+    // Otherwise return hardcoded categories
+    return [
+      { id: 0, name: 'All', value: 'ALL', icon: '🛒' },
+      { id: 1, name: 'Vegetables', value: 'Vegetables', icon: '🥦' },
+      { id: 2, name: 'Fruits', value: 'Fruits', icon: '🍎' },
+      { id: 3, name: 'Dairy', value: 'Dairy', icon: '🥛' },
+      { id: 4, name: 'Bakery', value: 'Bakery', icon: '🍞' },
+      { id: 5, name: 'Beverages', value: 'Beverages', icon: '🥤' },
+      { id: 6, name: 'Snacks', value: 'Snacks', icon: '🍿' },
+    ]
   },
 
-  // Get banners
+  // Get banners (placeholder - implement if you have a banners endpoint)
   getBanners: async () => {
-    const response = await API.get(API_ENDPOINTS.BANNERS)
-    return response.data
+    // If you have a banners endpoint, use it:
+    // const response = await API.get(API_ENDPOINTS.BANNERS)
+    // return response.data
+    
+    // Otherwise return hardcoded banners
+    return [
+      { id: 1, image: '/mango.jpg', title: 'Fresh Everyday', subtitle: 'Quality assured fruits & vegetables' },
+      { id: 2, image: '/milk.jpg', title: 'Best Deals', subtitle: 'Amazing discounts on grocery items' },
+      { id: 3, image: '/bread.jpg', title: 'Organic Products', subtitle: 'Farm fresh quality guaranteed' },
+    ]
   },
 }

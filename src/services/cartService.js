@@ -19,7 +19,7 @@ export const cartService = {
 
   // Update cart item
   updateCartItem: async (cartItemId, quantity) => {
-    const response = await api.put(
+    const response = await API.put(
       getApiUrl(API_ENDPOINTS.UPDATE_CART, { id: cartItemId }),
       { quantity }
     )

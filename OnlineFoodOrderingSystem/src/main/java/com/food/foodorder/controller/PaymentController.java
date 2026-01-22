@@ -9,7 +9,7 @@ import com.food.foodorder.entity.Payment;
 import com.food.foodorder.service.PaymentService;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/payment")
 @CrossOrigin("*")
 public class PaymentController {
 

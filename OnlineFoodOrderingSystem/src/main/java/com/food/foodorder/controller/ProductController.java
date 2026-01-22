@@ -11,7 +11,7 @@ import com.food.foodorder.entity.Food;
 import com.food.foodorder.repository.FoodRepository;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 @CrossOrigin("*")
 public class ProductController {
 

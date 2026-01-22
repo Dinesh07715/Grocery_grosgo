@@ -2,7 +2,8 @@
 
 import { isUserToken } from '../utils/tokenUtils'
 
-const API_URL = 'http://localhost:8081/api'
+const API_URL = import.meta.env.VITE_API_BASE_URL
+
 
 export const authService = {
   // Send OTP to phone number

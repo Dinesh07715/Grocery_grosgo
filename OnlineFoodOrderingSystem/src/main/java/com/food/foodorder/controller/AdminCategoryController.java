@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/categories")
+@RequestMapping("/admin/categories")
 @CrossOrigin("*")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminCategoryController {
